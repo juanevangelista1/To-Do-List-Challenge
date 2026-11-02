@@ -7,7 +7,7 @@ export function Cabecalho() {
         <Link href="/" className="brand">
           To Do List App
         </Link>
-        <Link href="/tarefas/nova" className="button primary">
+        <Link href="/tasks/new" className="button primary">
           New task
         </Link>
       </div>

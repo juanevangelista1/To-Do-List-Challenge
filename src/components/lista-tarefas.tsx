@@ -109,7 +109,7 @@ export function ListaTarefas() {
             </time>
             <div className="actions">
               <Link
-                href={`/tarefas/${tarefa.id}/editar`}
+                href={`/tasks/${tarefa.id}/edit`}
                 className="button primary"
                 aria-label={`Edit task: ${tarefa.titulo}`}
               >
