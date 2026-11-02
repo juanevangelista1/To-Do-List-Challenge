@@ -65,7 +65,7 @@ All procedures are defined in `src/server/router.ts` and exposed at `/api/trpc`.
 A task has the following shape:
 
 ```ts
-type Tarefa = {
+type Task = {
   id: number;
   titulo: string;
   descricao?: string;
@@ -183,7 +183,7 @@ Todos os procedimentos ficam em `src/server/router.ts` e são expostos em `/api/
 Uma tarefa tem o seguinte formato:
 
 ```ts
-type Tarefa = {
+type Task = {
   id: number;
   titulo: string;
   descricao?: string;

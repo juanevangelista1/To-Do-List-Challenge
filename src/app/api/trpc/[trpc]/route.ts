@@ -1,13 +1,13 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "@/server/router";
-import { tarefaStore } from "@/server/store";
+import { taskStore } from "@/server/store";
 
 function handler(req: Request) {
   return fetchRequestHandler({
     endpoint: "/api/trpc",
     req,
     router: appRouter,
-    createContext: () => ({ store: tarefaStore }),
+    createContext: () => ({ store: taskStore }),
   });
 }
 

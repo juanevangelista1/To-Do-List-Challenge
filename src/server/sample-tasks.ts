@@ -1,6 +1,6 @@
-import type { DadosTarefa } from "@/lib/tarefa-schema";
+import type { TaskData } from "@/lib/task-schema";
 
-export const tarefasIniciais: DadosTarefa[] = [
+export const sampleTasks: TaskData[] = [
   {
     titulo: "Review the Aurora project proposal",
     descricao: "Check scope, deadlines and pricing before sending the final version to the client.",

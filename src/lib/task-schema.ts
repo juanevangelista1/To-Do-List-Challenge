@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const tarefaSchema = z.object({
+export const taskSchema = z.object({
   titulo: z
     .string()
     .trim()
@@ -10,8 +10,8 @@ export const tarefaSchema = z.object({
     .string()
     .trim()
     .max(1000, "Description must be at most 1000 characters")
-    .transform((descricao) => descricao || undefined)
+    .transform((value) => value || undefined)
     .optional(),
 });
 
-export type DadosTarefa = z.output<typeof tarefaSchema>;
+export type TaskData = z.output<typeof taskSchema>;

@@ -6,17 +6,17 @@ import { createTRPCContext } from "@trpc/tanstack-react-query";
 import { useState, type ReactNode } from "react";
 import { Toaster } from "sonner";
 import type { AppRouter } from "@/server/router";
-import { criarQueryClient } from "@/trpc/query-client";
+import { createQueryClient } from "@/trpc/query-client";
 
 const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>();
 
 export { useTRPC };
 
-let queryClientDoNavegador: QueryClient | undefined;
+let browserQueryClient: QueryClient | undefined;
 
 function getQueryClient() {
-  if (typeof window === "undefined") return criarQueryClient();
-  return (queryClientDoNavegador ??= criarQueryClient());
+  if (typeof window === "undefined") return createQueryClient();
+  return (browserQueryClient ??= createQueryClient());
 }
 
 export function Providers({ children }: { children: ReactNode }) {

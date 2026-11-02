@@ -1,63 +1,63 @@
-import type { DadosTarefa } from "@/lib/tarefa-schema";
-import { tarefasIniciais } from "@/server/tarefas-iniciais";
+import type { TaskData } from "@/lib/task-schema";
+import { sampleTasks } from "@/server/sample-tasks";
 
-export type Tarefa = DadosTarefa & {
+export type Task = TaskData & {
   id: number;
   dataCriacao: string;
 };
 
-export function criarStore(iniciais: DadosTarefa[] = []) {
-  const tarefas = new Map<number, Tarefa>();
-  let ultimoId = 0;
+export function createTaskStore(initialTasks: TaskData[] = []) {
+  const tasks = new Map<number, Task>();
+  let lastId = 0;
 
-  function create(dados: DadosTarefa) {
-    const tarefa: Tarefa = {
-      ...dados,
-      id: ++ultimoId,
+  function create(data: TaskData) {
+    const task: Task = {
+      ...data,
+      id: ++lastId,
       dataCriacao: new Date().toISOString(),
     };
-    tarefas.set(tarefa.id, tarefa);
-    return tarefa;
+    tasks.set(task.id, task);
+    return task;
   }
 
-  iniciais.forEach(create);
+  initialTasks.forEach(create);
 
   return {
     create,
     list(limit: number, cursor?: number) {
-      const candidatas = [...tarefas.values()]
+      const candidates = [...tasks.values()]
         .reverse()
-        .filter((tarefa) => cursor === undefined || tarefa.id < cursor);
-      const items = candidatas.slice(0, limit);
+        .filter((task) => cursor === undefined || task.id < cursor);
+      const items = candidates.slice(0, limit);
       return {
         items,
-        nextCursor: candidatas.length > limit ? items.at(-1)?.id : undefined,
+        nextCursor: candidates.length > limit ? items.at(-1)?.id : undefined,
       };
     },
     find(id: number) {
-      return tarefas.get(id);
+      return tasks.get(id);
     },
-    update(id: number, dados: DadosTarefa) {
-      const atual = tarefas.get(id);
-      if (!atual) return undefined;
-      const atualizada: Tarefa = {
-        id: atual.id,
-        dataCriacao: atual.dataCriacao,
-        ...dados,
+    update(id: number, data: TaskData) {
+      const current = tasks.get(id);
+      if (!current) return undefined;
+      const updated: Task = {
+        id: current.id,
+        dataCriacao: current.dataCriacao,
+        ...data,
       };
-      tarefas.set(id, atualizada);
-      return atualizada;
+      tasks.set(id, updated);
+      return updated;
     },
     remove(id: number) {
-      return tarefas.delete(id);
+      return tasks.delete(id);
     },
   };
 }
 
-export type TarefaStore = ReturnType<typeof criarStore>;
+export type TaskStore = ReturnType<typeof createTaskStore>;
 
-const escopoGlobal = globalThis as typeof globalThis & {
-  tarefaStore?: TarefaStore;
+const globalScope = globalThis as typeof globalThis & {
+  taskStore?: TaskStore;
 };
 
-export const tarefaStore = (escopoGlobal.tarefaStore ??= criarStore(tarefasIniciais));
+export const taskStore = (globalScope.taskStore ??= createTaskStore(sampleTasks));

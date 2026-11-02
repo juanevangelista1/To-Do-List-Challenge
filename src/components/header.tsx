@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function Cabecalho() {
+export function Header() {
   return (
     <header className="app-header">
       <div className="app-header-content">

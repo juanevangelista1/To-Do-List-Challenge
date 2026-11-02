@@ -1,26 +1,26 @@
 import { TRPCError } from "@trpc/server";
 import { notFound } from "next/navigation";
-import { FormularioTarefa } from "@/components/formulario-tarefa";
+import { TaskForm } from "@/components/task-form";
 import { api } from "@/trpc/server";
 
-async function buscarTarefa(id: number) {
+async function getTask(id: number) {
   try {
     return await api.getById({ id });
-  } catch (erro) {
-    if (erro instanceof TRPCError && ["NOT_FOUND", "BAD_REQUEST"].includes(erro.code)) {
+  } catch (error) {
+    if (error instanceof TRPCError && ["NOT_FOUND", "BAD_REQUEST"].includes(error.code)) {
       notFound();
     }
-    throw erro;
+    throw error;
   }
 }
 
-export default async function EditarTarefaPage({
+export default async function EditTaskPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const tarefa = await buscarTarefa(Number(id));
+  const task = await getTask(Number(id));
 
-  return <FormularioTarefa tarefa={tarefa} />;
+  return <TaskForm task={task} />;
 }

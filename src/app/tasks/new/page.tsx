@@ -1,5 +1,5 @@
-import { FormularioTarefa } from "@/components/formulario-tarefa";
+import { TaskForm } from "@/components/task-form";
 
-export default function NovaTarefaPage() {
-  return <FormularioTarefa />;
+export default function NewTaskPage() {
+  return <TaskForm />;
 }
