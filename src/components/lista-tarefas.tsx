@@ -2,6 +2,7 @@
 
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
@@ -26,6 +27,23 @@ export function ListaTarefas() {
       onSettled: () => queryClient.invalidateQueries(trpc.listar.pathFilter()),
     }),
   );
+
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError } = consulta;
+  const botaoCarregarMais = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const botao = botaoCarregarMais.current;
+    if (!botao || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
+
+    const observador = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) fetchNextPage({ cancelRefetch: false });
+      },
+      { rootMargin: "200px" },
+    );
+    observador.observe(botao);
+    return () => observador.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError]);
 
   const tarefas = consulta.data?.pages.flatMap((pagina) => pagina.itens) ?? [];
 
@@ -78,6 +96,24 @@ export function ListaTarefas() {
           </li>
         ))}
       </ul>
+
+      {isFetchNextPageError && (
+        <p role="alert" className="erro">
+          Não foi possível carregar mais tarefas.
+        </p>
+      )}
+
+      {hasNextPage && (
+        <button
+          ref={botaoCarregarMais}
+          type="button"
+          className="carregar-mais"
+          disabled={isFetchingNextPage}
+          onClick={() => fetchNextPage({ cancelRefetch: false })}
+        >
+          {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+        </button>
+      )}
     </>
   );
 }
