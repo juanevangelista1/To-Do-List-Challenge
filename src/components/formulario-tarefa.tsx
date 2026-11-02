@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { obterMensagemErro } from "@/lib/mensagem-erro";
 import { tarefaSchema } from "@/lib/tarefa-schema";
 import type { AppRouter } from "@/server/router";
 import type { Tarefa } from "@/server/store";
@@ -32,7 +33,7 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
 
   function tratarErro(erro: TRPCClientErrorLike<AppRouter>) {
     setErrosCampos(erro.data?.errosCampos ?? {});
-    setErroGeral(erro.message);
+    setErroGeral(obterMensagemErro(erro));
   }
 
   const criacao = useMutation(

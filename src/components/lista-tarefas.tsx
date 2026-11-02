@@ -4,6 +4,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-q
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
+import { obterMensagemErro } from "@/lib/mensagem-erro";
 import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
 
@@ -42,7 +43,7 @@ export function ListaTarefas() {
   const exclusao = useMutation(
     trpc.deletar.mutationOptions({
       onSuccess: () => toast.success("Task deleted"),
-      onError: (erro) => toast.error(erro.message),
+      onError: (erro) => toast.error(obterMensagemErro(erro)),
       onSettled: () => queryClient.invalidateQueries(trpc.listar.pathFilter()),
     }),
   );
@@ -78,7 +79,7 @@ export function ListaTarefas() {
 
       {consulta.isError && !consulta.data && (
         <div role="alert">
-          <p>Could not load tasks: {consulta.error.message}</p>
+          <p>Could not load tasks: {obterMensagemErro(consulta.error)}</p>
           <button type="button" onClick={() => consulta.refetch()}>
             Try again
           </button>
