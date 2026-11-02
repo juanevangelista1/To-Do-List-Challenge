@@ -96,7 +96,6 @@ src/
 - **Full updates:** `atualizar` always receives the title and description, which removes any doubt between keeping and clearing the description.
 - **Dates as ISO strings:** this avoids a transformer such as `superjson`. Dates are displayed with a fixed locale and time zone to prevent hydration differences between server and browser.
 - **Accessible infinite scroll:** an `IntersectionObserver` watches the "Load more" button, which stays available for keyboard navigation and for retrying after a failure.
-- **Deliberate delay on infinite scroll:** in-memory data responds instantly, so the app waits 800 ms before loading more tasks to keep the loading state visible. This constant (`ATRASO_CARREGAR_MAIS_MS`) should be removed once there is a real backend.
 - **Loading state on the edit link:** a `loading.tsx` on the edit route would start streaming before the app knows whether the task exists, turning the 404 status into a 200. `useLinkStatus` shows the loading state on the link and keeps the correct status.
 - **One automatic retry:** queries retry once, so a connection error appears in about two seconds instead of the longer default wait.
 - **No code comments:** decisions are recorded in this README and in the commit messages.
@@ -215,7 +214,6 @@ src/
 - **Atualização completa:** `atualizar` sempre recebe o título e a descrição, o que elimina a dúvida entre "manter" e "limpar" a descrição.
 - **Data como string ISO:** dispensa um transformer como o `superjson`. A exibição usa idioma e fuso fixos para evitar diferenças de hidratação entre servidor e navegador.
 - **Infinite scroll acessível:** um `IntersectionObserver` observa o botão "Load more", que continua disponível para navegação por teclado e para tentar novamente após uma falha.
-- **Atraso proposital no infinite scroll:** os dados em memória respondem na hora, então o app espera 800 ms antes de carregar mais tarefas para manter o estado de carregamento visível. Essa constante (`ATRASO_CARREGAR_MAIS_MS`) deve ser removida quando houver um backend real.
 - **Carregamento no link de edição:** um `loading.tsx` na rota de edição começaria o streaming antes de o app saber se a tarefa existe, transformando o status 404 em 200. O `useLinkStatus` mostra o carregamento no link e mantém o status correto.
 - **Uma repetição automática:** as consultas repetem uma vez, então um erro de conexão aparece em cerca de dois segundos, em vez da espera padrão mais longa.
 - **Sem comentários no código:** as decisões ficam registradas neste README e nas mensagens de commit.

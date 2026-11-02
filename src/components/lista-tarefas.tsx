@@ -2,13 +2,11 @@
 
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link, { useLinkStatus } from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { obterMensagemErro } from "@/lib/mensagem-erro";
 import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
-
-const ATRASO_CARREGAR_MAIS_MS = 800;
 
 const formatoData = new Intl.DateTimeFormat("en-US", {
   dateStyle: "medium",
@@ -61,27 +59,19 @@ export function ListaTarefas() {
     }),
   );
 
-  const { fetchNextPage, hasNextPage, isFetchNextPageError } = consulta;
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError } = consulta;
   const botaoCarregarMais = useRef<HTMLButtonElement>(null);
-  const [carregandoMais, setCarregandoMais] = useState(false);
-
-  const carregarMais = useCallback(async () => {
-    setCarregandoMais(true);
-    await new Promise((resolve) => setTimeout(resolve, ATRASO_CARREGAR_MAIS_MS));
-    await fetchNextPage({ cancelRefetch: false });
-    setCarregandoMais(false);
-  }, [fetchNextPage]);
 
   useEffect(() => {
     const botao = botaoCarregarMais.current;
-    if (!botao || !hasNextPage || carregandoMais || isFetchNextPageError) return;
+    if (!botao || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
 
     const observador = new IntersectionObserver(([entrada]) => {
-      if (entrada.isIntersecting) carregarMais();
+      if (entrada.isIntersecting) fetchNextPage({ cancelRefetch: false });
     });
     observador.observe(botao);
     return () => observador.disconnect();
-  }, [carregarMais, hasNextPage, carregandoMais, isFetchNextPageError]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError]);
 
   const tarefas = consulta.data?.pages.flatMap((pagina) => pagina.itens) ?? [];
 
@@ -142,7 +132,7 @@ export function ListaTarefas() {
         ))}
       </ul>
 
-      {isFetchNextPageError && !carregandoMais && (
+      {isFetchNextPageError && !isFetchingNextPage && (
         <p role="alert" className="erro">
           Could not load more tasks.
         </p>
@@ -153,10 +143,10 @@ export function ListaTarefas() {
           ref={botaoCarregarMais}
           type="button"
           className="carregar-mais"
-          disabled={carregandoMais}
-          onClick={carregarMais}
+          disabled={isFetchingNextPage}
+          onClick={() => fetchNextPage({ cancelRefetch: false })}
         >
-          {carregandoMais ? "Loading..." : "Load more"}
+          {isFetchingNextPage ? "Loading..." : "Load more"}
         </button>
       )}
     </>
