@@ -5,7 +5,6 @@ import Link, { useLinkStatus } from "next/link";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { obterMensagemErro } from "@/lib/mensagem-erro";
-import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
 
 const formatoData = new Intl.DateTimeFormat("en-US", {
@@ -47,7 +46,7 @@ function ConteudoLinkEditar() {
 export function ListaTarefas() {
   const trpc = useTRPC();
   const consulta = useInfiniteQuery(
-    trpc.listar.infiniteQueryOptions({}, { getNextPageParam: obterProximoCursor }),
+    trpc.listar.infiniteQueryOptions({}, { getNextPageParam: (pagina) => pagina.proximoCursor }),
   );
 
   const queryClient = useQueryClient();

@@ -81,7 +81,7 @@ The title is required and has surrounding spaces removed. Titles accept up to 12
 src/
 ├─ app/                 # pages and API route
 ├─ components/          # header, list and form
-├─ lib/                 # validation schema and pagination
+├─ lib/                 # validation schema and error messages
 ├─ server/              # in-memory store, sample tasks, router and tests
 └─ trpc/                # tRPC setup for the client and the server
 ```
@@ -199,7 +199,7 @@ O título é obrigatório, e espaços nas extremidades são removidos. O título
 src/
 ├─ app/                 # páginas e rota da API
 ├─ components/          # header, listagem e formulário
-├─ lib/                 # schema de validação e paginação
+├─ lib/                 # schema de validação e mensagens de erro
 ├─ server/              # store em memória, tarefas de exemplo, router e testes
 └─ trpc/                # configuração do tRPC no cliente e no servidor
 ```
