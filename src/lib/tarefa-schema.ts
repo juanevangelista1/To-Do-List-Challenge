@@ -10,8 +10,8 @@ export const tarefaSchema = z.object({
     .string()
     .trim()
     .max(1000, "A descrição deve ter no máximo 1000 caracteres")
-    .optional()
-    .transform((descricao) => descricao || undefined),
+    .transform((descricao) => descricao || undefined)
+    .optional(),
 });
 
 export type DadosTarefa = z.output<typeof tarefaSchema>;
