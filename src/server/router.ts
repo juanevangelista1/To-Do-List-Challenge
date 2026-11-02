@@ -7,14 +7,9 @@ export type Contexto = { store: TarefaStore };
 
 const t = initTRPC.context<Contexto>().create({
   errorFormatter({ shape, error }) {
-    const erroValidacao = error.cause instanceof ZodError ? error.cause : null;
     return {
       ...shape,
-      message: erroValidacao ? "Invalid data" : shape.message,
-      data: {
-        ...shape.data,
-        errosCampos: erroValidacao && z.flattenError(erroValidacao).fieldErrors,
-      },
+      message: error.cause instanceof ZodError ? error.cause.issues[0].message : shape.message,
     };
   },
 });

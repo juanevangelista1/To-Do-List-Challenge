@@ -32,7 +32,6 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
   }
 
   function tratarErro(erro: TRPCClientErrorLike<AppRouter>) {
-    setErrosCampos(erro.data?.errosCampos ?? {});
     setErroGeral(obterMensagemErro(erro));
   }
 
