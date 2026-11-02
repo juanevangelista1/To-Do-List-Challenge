@@ -91,7 +91,11 @@ export function ListaTarefas() {
         {tarefas.map((tarefa) => (
           <li key={tarefa.id} className="cartao">
             <h2>{tarefa.titulo}</h2>
-            {tarefa.descricao && <p>{tarefa.descricao}</p>}
+            {tarefa.descricao && (
+              <p className="descricao" title={tarefa.descricao}>
+                {tarefa.descricao}
+              </p>
+            )}
             <time dateTime={tarefa.dataCriacao}>
               {formatoData.format(new Date(tarefa.dataCriacao))}
             </time>
