@@ -1,7 +1,7 @@
 "use client";
 
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { obterMensagemErro } from "@/lib/mensagem-erro";
@@ -30,6 +30,17 @@ function IconeLapis() {
       <path d="M12 20h9" />
       <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
     </svg>
+  );
+}
+
+function ConteudoLinkEditar() {
+  const { pending } = useLinkStatus();
+
+  return (
+    <>
+      <IconeLapis />
+      {pending ? "Loading..." : "Edit"}
+    </>
   );
 }
 
@@ -106,8 +117,7 @@ export function ListaTarefas() {
                 className="botao primario"
                 aria-label={`Edit task: ${tarefa.titulo}`}
               >
-                <IconeLapis />
-                Edit
+                <ConteudoLinkEditar />
               </Link>
               <button
                 type="button"
