@@ -53,12 +53,7 @@ export function ListaTarefas() {
 
   return (
     <>
-      <header className="cabecalho">
-        <h1>Tarefas</h1>
-        <Link href="/tarefas/nova" className="botao primario">
-          Nova tarefa
-        </Link>
-      </header>
+      <h1>Tarefas</h1>
 
       {consulta.isPending && <p role="status">Carregando tarefas...</p>}
 

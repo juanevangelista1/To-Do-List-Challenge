@@ -5,6 +5,8 @@
   --texto: #1c2024;
   --texto-suave: #5b6470;
   --borda: #d9dde3;
+  --borda-forte: #7b8491;
+  --cabecalho-fundo: rgb(246 247 249 / 78%);
   --destaque: #2f5fd0;
   --destaque-texto: #ffffff;
   --erro: #b3261e;
@@ -17,6 +19,8 @@
     --texto: #eceef1;
     --texto-suave: #a2aab4;
     --borda: #363c43;
+    --borda-forte: #7b8491;
+    --cabecalho-fundo: rgb(20 23 26 / 78%);
     --destaque: #7fa2f5;
     --destaque-texto: #10141a;
     --erro: #f2a19b;
@@ -25,6 +29,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -42,7 +50,7 @@ main {
 }
 
 h1 {
-  margin: 0;
+  margin: 0 0 1.25rem;
   font-size: 1.75rem;
 }
 
@@ -86,12 +94,42 @@ button.primario,
 }
 
 .cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--borda-forte);
+  background: var(--cabecalho-fundo);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cabecalho {
+    background: var(--fundo);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .cabecalho {
+    background: var(--fundo);
+  }
+}
+
+.cabecalho-conteudo {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+}
+
+.marca {
+  color: var(--texto);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
 }
 
 .lista {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Cabecalho } from "@/components/cabecalho";
 import { Providers } from "@/trpc/client";
 import "./globals.css";
 
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR">
       <body>
         <Providers>
+          <Cabecalho />
           <main>{children}</main>
         </Providers>
       </body>
