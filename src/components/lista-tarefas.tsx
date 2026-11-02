@@ -95,29 +95,29 @@ export function ListaTarefas() {
 
       {consulta.isSuccess && tarefas.length === 0 && <p>No tasks yet.</p>}
 
-      <ul className="lista">
+      <ul className="task-list">
         {tarefas.map((tarefa) => (
-          <li key={tarefa.id} className="cartao">
+          <li key={tarefa.id} className="task-card">
             <h2>{tarefa.titulo}</h2>
             {tarefa.descricao && (
-              <p className="descricao" title={tarefa.descricao}>
+              <p className="task-description" title={tarefa.descricao}>
                 {tarefa.descricao}
               </p>
             )}
             <time dateTime={tarefa.dataCriacao}>
               {formatoData.format(new Date(tarefa.dataCriacao))}
             </time>
-            <div className="acoes">
+            <div className="actions">
               <Link
                 href={`/tarefas/${tarefa.id}/editar`}
-                className="botao primario"
+                className="button primary"
                 aria-label={`Edit task: ${tarefa.titulo}`}
               >
                 <ConteudoLinkEditar />
               </Link>
               <button
                 type="button"
-                className="perigo"
+                className="danger"
                 aria-label={`Delete task: ${tarefa.titulo}`}
                 disabled={exclusao.isPending}
                 onClick={() => excluir(tarefa.id, tarefa.titulo)}
@@ -132,7 +132,7 @@ export function ListaTarefas() {
       </ul>
 
       {isFetchNextPageError && !isFetchingNextPage && (
-        <p role="alert" className="erro">
+        <p role="alert" className="error-message">
           Could not load more tasks.
         </p>
       )}
@@ -141,7 +141,7 @@ export function ListaTarefas() {
         <button
           ref={botaoCarregarMais}
           type="button"
-          className="carregar-mais"
+          className="load-more"
           disabled={isFetchingNextPage}
           onClick={() => fetchNextPage({ cancelRefetch: false })}
         >

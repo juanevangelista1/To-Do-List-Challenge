@@ -68,11 +68,11 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
   }
 
   return (
-    <form onSubmit={enviar} noValidate className="formulario">
+    <form onSubmit={enviar} noValidate className="task-form">
       <h1>{tarefa ? "Edit task" : "New task"}</h1>
 
       {erroGeral && (
-        <p role="alert" className="erro">
+        <p role="alert" className="error-message">
           {erroGeral}
         </p>
       )}
@@ -87,7 +87,7 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
         required
       />
       {errosCampos.titulo && (
-        <p id="erro-titulo" className="erro">
+        <p id="erro-titulo" className="error-message">
           {errosCampos.titulo[0]}
         </p>
       )}
@@ -102,16 +102,16 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
         aria-describedby={errosCampos.descricao ? "erro-descricao" : undefined}
       />
       {errosCampos.descricao && (
-        <p id="erro-descricao" className="erro">
+        <p id="erro-descricao" className="error-message">
           {errosCampos.descricao[0]}
         </p>
       )}
 
-      <div className="acoes">
-        <button type="submit" className="primario" disabled={salvando}>
+      <div className="actions">
+        <button type="submit" className="primary" disabled={salvando}>
           {salvando ? "Saving..." : "Save"}
         </button>
-        <Link href="/" className="botao">
+        <Link href="/" className="button">
           Cancel
         </Link>
       </div>
