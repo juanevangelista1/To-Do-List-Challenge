@@ -80,7 +80,7 @@ export function ListaTarefas() {
 
   return (
     <>
-      <h1>Today&apos;s tasks</h1>
+      <h1>My tasks</h1>
 
       {consulta.isPending && <p role="status">Loading tasks...</p>}
 
