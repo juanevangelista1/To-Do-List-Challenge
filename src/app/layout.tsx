@@ -5,7 +5,7 @@ import { Providers } from "@/trpc/client";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lista de Tarefas",
+  title: "To Do List App",
   description: "Gerenciador simples de tarefas com Next.js e tRPC",
 };
 

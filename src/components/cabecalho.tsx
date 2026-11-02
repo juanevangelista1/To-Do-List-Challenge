@@ -5,7 +5,7 @@ export function Cabecalho() {
     <header className="cabecalho">
       <div className="cabecalho-conteudo">
         <Link href="/" className="marca">
-          Lista de Tarefas
+          To Do List App
         </Link>
         <Link href="/tarefas/nova" className="botao primario">
           Nova tarefa

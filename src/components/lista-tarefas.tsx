@@ -72,7 +72,7 @@ export function ListaTarefas() {
 
   return (
     <>
-      <h1>Tarefas</h1>
+      <h1>To Do List App</h1>
 
       {consulta.isPending && <p role="status">Carregando tarefas...</p>}
 

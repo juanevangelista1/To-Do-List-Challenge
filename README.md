@@ -1,4 +1,4 @@
-# Lista de Tarefas
+# To Do List App
 
 Gerenciador simples de tarefas feito com Next.js 15 e tRPC. As tarefas ficam em memória no servidor, e a listagem é pré-carregada com Server-Side Rendering.
 
