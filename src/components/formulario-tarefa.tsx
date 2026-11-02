@@ -1,0 +1,118 @@
+"use client";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { TRPCClientErrorLike } from "@trpc/client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+import { tarefaSchema } from "@/lib/tarefa-schema";
+import type { AppRouter } from "@/server/router";
+import type { Tarefa } from "@/server/store";
+import { useTRPC } from "@/trpc/client";
+
+type ErrosCampos = { titulo?: string[]; descricao?: string[] };
+
+export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const [titulo, setTitulo] = useState(tarefa?.titulo ?? "");
+  const [descricao, setDescricao] = useState(tarefa?.descricao ?? "");
+  const [errosCampos, setErrosCampos] = useState<ErrosCampos>({});
+  const [erroGeral, setErroGeral] = useState<string | null>(null);
+
+  function concluir(mensagem: string) {
+    toast.success(mensagem);
+    queryClient.invalidateQueries(trpc.listar.pathFilter());
+    router.push("/");
+  }
+
+  function tratarErro(erro: TRPCClientErrorLike<AppRouter>) {
+    setErrosCampos(erro.data?.errosCampos ?? {});
+    setErroGeral(erro.message);
+  }
+
+  const criacao = useMutation(
+    trpc.criar.mutationOptions({
+      onSuccess: () => concluir("Tarefa criada"),
+      onError: tratarErro,
+    }),
+  );
+  const atualizacao = useMutation(
+    trpc.atualizar.mutationOptions({
+      onSuccess: () => concluir("Tarefa atualizada"),
+      onError: tratarErro,
+    }),
+  );
+  const salvando = criacao.isPending || atualizacao.isPending;
+
+  function enviar(evento: FormEvent) {
+    evento.preventDefault();
+    setErroGeral(null);
+
+    const resultado = tarefaSchema.safeParse({ titulo, descricao });
+    if (!resultado.success) {
+      setErrosCampos(z.flattenError(resultado.error).fieldErrors);
+      return;
+    }
+
+    setErrosCampos({});
+    if (tarefa) {
+      atualizacao.mutate({ id: tarefa.id, ...resultado.data });
+    } else {
+      criacao.mutate(resultado.data);
+    }
+  }
+
+  return (
+    <form onSubmit={enviar} noValidate className="formulario">
+      <h1>{tarefa ? "Editar tarefa" : "Nova tarefa"}</h1>
+
+      {erroGeral && (
+        <p role="alert" className="erro">
+          {erroGeral}
+        </p>
+      )}
+
+      <label htmlFor="titulo">Título</label>
+      <input
+        id="titulo"
+        value={titulo}
+        onChange={(evento) => setTitulo(evento.target.value)}
+        aria-invalid={Boolean(errosCampos.titulo)}
+        aria-describedby={errosCampos.titulo ? "erro-titulo" : undefined}
+        required
+      />
+      {errosCampos.titulo && (
+        <p id="erro-titulo" className="erro">
+          {errosCampos.titulo[0]}
+        </p>
+      )}
+
+      <label htmlFor="descricao">Descrição (opcional)</label>
+      <textarea
+        id="descricao"
+        rows={4}
+        value={descricao}
+        onChange={(evento) => setDescricao(evento.target.value)}
+        aria-invalid={Boolean(errosCampos.descricao)}
+        aria-describedby={errosCampos.descricao ? "erro-descricao" : undefined}
+      />
+      {errosCampos.descricao && (
+        <p id="erro-descricao" className="erro">
+          {errosCampos.descricao[0]}
+        </p>
+      )}
+
+      <div className="acoes">
+        <button type="submit" className="primario" disabled={salvando}>
+          {salvando ? "Salvando..." : "Salvar"}
+        </button>
+        <Link href="/">Cancelar</Link>
+      </div>
+    </form>
+  );
+}

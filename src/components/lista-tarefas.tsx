@@ -1,6 +1,7 @@
 "use client";
 
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { toast } from "sonner";
 import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
@@ -34,7 +35,12 @@ export function ListaTarefas() {
 
   return (
     <>
-      <h1>Tarefas</h1>
+      <header className="cabecalho">
+        <h1>Tarefas</h1>
+        <Link href="/tarefas/nova" className="botao primario">
+          Nova tarefa
+        </Link>
+      </header>
 
       {consulta.isPending && <p role="status">Carregando tarefas...</p>}
 
@@ -58,6 +64,7 @@ export function ListaTarefas() {
               {formatoData.format(new Date(tarefa.dataCriacao))}
             </time>
             <div className="acoes">
+              <Link href={`/tarefas/${tarefa.id}/editar`}>Editar</Link>
               <button
                 type="button"
                 disabled={exclusao.isPending}
