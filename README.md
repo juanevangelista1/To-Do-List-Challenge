@@ -41,6 +41,15 @@ Open [http://localhost:3000](http://localhost:3000). The project does not use en
 | `npm test` | Runs the tests |
 | `npm run lint` | Runs ESLint |
 
+### How it works
+
+1. **First load:** the Home page runs on the server, fetches the first 10 tasks directly through the tRPC router and sends the HTML with the tasks already in it.
+2. **Hydration:** the fetched data goes along with the page to TanStack Query, so the browser takes over without requesting those tasks again.
+3. **Infinite scroll:** when the "Load more" button reaches the screen, the browser requests the next page with the cursor of the last task loaded.
+4. **Create and edit:** the form validates the data with the Zod schema and sends it through a tRPC mutation. The API validates it again, updates the in-memory store, and the list is refreshed.
+5. **Delete:** after the user confirms, the task is removed through a mutation, a success or error message is shown, and the list is refreshed.
+6. **Errors:** validation errors appear next to each field, API errors such as "Task not found" are shown as returned, and connection failures show a message asking the user to try again.
+
 ### API
 
 All procedures are defined in `src/server/router.ts` and exposed at `/api/trpc`. Their names and fields are in Portuguese, following the challenge specification.
@@ -87,6 +96,9 @@ src/
 - **Full updates:** `atualizar` always receives the title and description, which removes any doubt between keeping and clearing the description.
 - **Dates as ISO strings:** this avoids a transformer such as `superjson`. Dates are displayed with a fixed locale and time zone to prevent hydration differences between server and browser.
 - **Accessible infinite scroll:** an `IntersectionObserver` watches the "Load more" button, which stays available for keyboard navigation and for retrying after a failure.
+- **Deliberate delay on infinite scroll:** in-memory data responds instantly, so the app waits 800 ms before loading more tasks to keep the loading state visible. This constant (`ATRASO_CARREGAR_MAIS_MS`) should be removed once there is a real backend.
+- **Loading state on the edit link:** a `loading.tsx` on the edit route would start streaming before the app knows whether the task exists, turning the 404 status into a 200. `useLinkStatus` shows the loading state on the link and keeps the correct status.
+- **One automatic retry:** queries retry once, so a connection error appears in about two seconds instead of the longer default wait.
 - **No code comments:** decisions are recorded in this README and in the commit messages.
 
 ### Limitations
@@ -148,7 +160,16 @@ Acesse [http://localhost:3000](http://localhost:3000). O projeto não usa variá
 | `npm test` | Executa os testes |
 | `npm run lint` | Executa o ESLint |
 
-### API
+### Como funciona
+
+1. **Primeiro carregamento:** a Home roda no servidor, busca as 10 primeiras tarefas diretamente pelo router tRPC e envia o HTML já com as tarefas.
+2. **Hidratação:** os dados buscados seguem com a página para o TanStack Query, e o navegador assume sem pedir essas tarefas novamente.
+3. **Infinite scroll:** quando o botão "Load more" chega à tela, o navegador pede a próxima página com o cursor da última tarefa carregada.
+4. **Criação e edição:** o formulário valida os dados com o schema Zod e os envia por uma mutation do tRPC. A API valida de novo, atualiza o store em memória, e a lista é atualizada.
+5. **Exclusão:** depois da confirmação, a tarefa é removida por uma mutation, uma mensagem de sucesso ou erro é exibida, e a lista é atualizada.
+6. **Erros:** erros de validação aparecem junto a cada campo, erros da API como "Task not found" são exibidos como retornados, e falhas de conexão mostram uma mensagem pedindo para tentar novamente.
+
+### Procedimentos da API
 
 Todos os procedimentos ficam em `src/server/router.ts` e são expostos em `/api/trpc`. Os nomes e campos estão em português, seguindo a especificação do desafio.
 
@@ -194,6 +215,9 @@ src/
 - **Atualização completa:** `atualizar` sempre recebe o título e a descrição, o que elimina a dúvida entre "manter" e "limpar" a descrição.
 - **Data como string ISO:** dispensa um transformer como o `superjson`. A exibição usa idioma e fuso fixos para evitar diferenças de hidratação entre servidor e navegador.
 - **Infinite scroll acessível:** um `IntersectionObserver` observa o botão "Load more", que continua disponível para navegação por teclado e para tentar novamente após uma falha.
+- **Atraso proposital no infinite scroll:** os dados em memória respondem na hora, então o app espera 800 ms antes de carregar mais tarefas para manter o estado de carregamento visível. Essa constante (`ATRASO_CARREGAR_MAIS_MS`) deve ser removida quando houver um backend real.
+- **Carregamento no link de edição:** um `loading.tsx` na rota de edição começaria o streaming antes de o app saber se a tarefa existe, transformando o status 404 em 200. O `useLinkStatus` mostra o carregamento no link e mantém o status correto.
+- **Uma repetição automática:** as consultas repetem uma vez, então um erro de conexão aparece em cerca de dois segundos, em vez da espera padrão mais longa.
 - **Sem comentários no código:** as decisões ficam registradas neste README e nas mensagens de commit.
 
 ### Limitações
