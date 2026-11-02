@@ -3,10 +3,10 @@
 export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
     <div role="alert">
-      <h1>Algo deu errado</h1>
-      <p>Não foi possível carregar esta página.</p>
+      <h1>Something went wrong</h1>
+      <p>This page could not be loaded.</p>
       <button type="button" onClick={reset}>
-        Tentar novamente
+        Try again
       </button>
     </div>
   );

@@ -10,7 +10,7 @@ const t = initTRPC.context<Contexto>().create({
     const erroValidacao = error.cause instanceof ZodError ? error.cause : null;
     return {
       ...shape,
-      message: erroValidacao ? "Dados inválidos" : shape.message,
+      message: erroValidacao ? "Invalid data" : shape.message,
       data: {
         ...shape.data,
         errosCampos: erroValidacao && z.flattenError(erroValidacao).fieldErrors,
@@ -22,7 +22,7 @@ const t = initTRPC.context<Contexto>().create({
 const idSchema = z.number().int().positive();
 
 function tarefaNaoEncontrada() {
-  return new TRPCError({ code: "NOT_FOUND", message: "Tarefa não encontrada" });
+  return new TRPCError({ code: "NOT_FOUND", message: "Task not found" });
 }
 
 export const appRouter = t.router({

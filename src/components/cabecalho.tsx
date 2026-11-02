@@ -8,7 +8,7 @@ export function Cabecalho() {
           To Do List App
         </Link>
         <Link href="/tarefas/nova" className="botao primario">
-          Nova tarefa
+          New task
         </Link>
       </div>
     </header>

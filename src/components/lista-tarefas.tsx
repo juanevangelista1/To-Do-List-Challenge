@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
 
-const formatoData = new Intl.DateTimeFormat("pt-BR", {
-  dateStyle: "short",
+const formatoData = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "medium",
   timeStyle: "short",
   timeZone: "America/Sao_Paulo",
 });
@@ -41,7 +41,7 @@ export function ListaTarefas() {
   const queryClient = useQueryClient();
   const exclusao = useMutation(
     trpc.deletar.mutationOptions({
-      onSuccess: () => toast.success("Tarefa excluída"),
+      onSuccess: () => toast.success("Task deleted"),
       onError: (erro) => toast.error(erro.message),
       onSettled: () => queryClient.invalidateQueries(trpc.listar.pathFilter()),
     }),
@@ -67,25 +67,25 @@ export function ListaTarefas() {
   const tarefas = consulta.data?.pages.flatMap((pagina) => pagina.itens) ?? [];
 
   function excluir(id: number, titulo: string) {
-    if (window.confirm(`Excluir a tarefa "${titulo}"?`)) exclusao.mutate({ id });
+    if (window.confirm(`Delete task "${titulo}"?`)) exclusao.mutate({ id });
   }
 
   return (
     <>
       <h1>To Do List App</h1>
 
-      {consulta.isPending && <p role="status">Carregando tarefas...</p>}
+      {consulta.isPending && <p role="status">Loading tasks...</p>}
 
       {consulta.isError && !consulta.data && (
         <div role="alert">
-          <p>Não foi possível carregar as tarefas: {consulta.error.message}</p>
+          <p>Could not load tasks: {consulta.error.message}</p>
           <button type="button" onClick={() => consulta.refetch()}>
-            Tentar novamente
+            Try again
           </button>
         </div>
       )}
 
-      {consulta.isSuccess && tarefas.length === 0 && <p>Nenhuma tarefa cadastrada.</p>}
+      {consulta.isSuccess && tarefas.length === 0 && <p>No tasks yet.</p>}
 
       <ul className="lista">
         {tarefas.map((tarefa) => (
@@ -103,21 +103,21 @@ export function ListaTarefas() {
               <Link
                 href={`/tarefas/${tarefa.id}/editar`}
                 className="botao primario"
-                aria-label={`Editar tarefa: ${tarefa.titulo}`}
+                aria-label={`Edit task: ${tarefa.titulo}`}
               >
                 <IconeLapis />
-                Editar
+                Edit
               </Link>
               <button
                 type="button"
                 className="perigo"
-                aria-label={`Excluir tarefa: ${tarefa.titulo}`}
+                aria-label={`Delete task: ${tarefa.titulo}`}
                 disabled={exclusao.isPending}
                 onClick={() => excluir(tarefa.id, tarefa.titulo)}
               >
                 {exclusao.isPending && exclusao.variables?.id === tarefa.id
-                  ? "Excluindo..."
-                  : "Excluir"}
+                  ? "Deleting..."
+                  : "Delete"}
               </button>
             </div>
           </li>
@@ -126,7 +126,7 @@ export function ListaTarefas() {
 
       {isFetchNextPageError && (
         <p role="alert" className="erro">
-          Não foi possível carregar mais tarefas.
+          Could not load more tasks.
         </p>
       )}
 
@@ -138,7 +138,7 @@ export function ListaTarefas() {
           disabled={isFetchingNextPage}
           onClick={() => fetchNextPage({ cancelRefetch: false })}
         >
-          {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+          {isFetchingNextPage ? "Loading..." : "Load more"}
         </button>
       )}
     </>

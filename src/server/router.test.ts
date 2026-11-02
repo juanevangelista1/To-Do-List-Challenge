@@ -45,7 +45,7 @@ describe("atualizar", () => {
   it("retorna NOT_FOUND para tarefa inexistente", async () => {
     await expect(api.atualizar({ id: 99, titulo: "Novo" })).rejects.toMatchObject({
       code: "NOT_FOUND",
-      message: "Tarefa não encontrada",
+      message: "Task not found",
     });
   });
 });

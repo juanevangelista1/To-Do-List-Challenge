@@ -37,13 +37,13 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
 
   const criacao = useMutation(
     trpc.criar.mutationOptions({
-      onSuccess: () => concluir("Tarefa criada"),
+      onSuccess: () => concluir("Task created"),
       onError: tratarErro,
     }),
   );
   const atualizacao = useMutation(
     trpc.atualizar.mutationOptions({
-      onSuccess: () => concluir("Tarefa atualizada"),
+      onSuccess: () => concluir("Task updated"),
       onError: tratarErro,
     }),
   );
@@ -69,7 +69,7 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
 
   return (
     <form onSubmit={enviar} noValidate className="formulario">
-      <h1>{tarefa ? "Editar tarefa" : "Nova tarefa"}</h1>
+      <h1>{tarefa ? "Edit task" : "New task"}</h1>
 
       {erroGeral && (
         <p role="alert" className="erro">
@@ -77,7 +77,7 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
         </p>
       )}
 
-      <label htmlFor="titulo">Título</label>
+      <label htmlFor="titulo">Title</label>
       <input
         id="titulo"
         value={titulo}
@@ -92,7 +92,7 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
         </p>
       )}
 
-      <label htmlFor="descricao">Descrição (opcional)</label>
+      <label htmlFor="descricao">Description (optional)</label>
       <textarea
         id="descricao"
         rows={4}
@@ -109,10 +109,10 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
 
       <div className="acoes">
         <button type="submit" className="primario" disabled={salvando}>
-          {salvando ? "Salvando..." : "Salvar"}
+          {salvando ? "Saving..." : "Save"}
         </button>
         <Link href="/" className="botao">
-          Cancelar
+          Cancel
         </Link>
       </div>
     </form>

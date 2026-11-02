@@ -81,7 +81,7 @@ src/
 - **Schema único:** o formulário e a API usam o mesmo schema Zod. O formulário dá retorno imediato, e a API continua sendo a validação confiável.
 - **Atualização completa:** `atualizar` sempre recebe o título e a descrição, o que elimina a dúvida entre "manter" e "limpar" a descrição.
 - **Data como string ISO:** dispensa um transformer como o `superjson`. A exibição usa idioma e fuso fixos para evitar diferenças de hidratação entre servidor e navegador.
-- **Infinite scroll acessível:** um `IntersectionObserver` observa o botão "Carregar mais", que continua disponível para navegação por teclado e para tentar novamente após uma falha.
+- **Infinite scroll acessível:** um `IntersectionObserver` observa o botão "Load more", que continua disponível para navegação por teclado e para tentar novamente após uma falha.
 - **Sem comentários no código:** as decisões ficam registradas neste README e nas mensagens de commit.
 
 ## Limitações
