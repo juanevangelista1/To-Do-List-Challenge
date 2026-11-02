@@ -8,6 +8,7 @@
   --borda-forte: #7b8491;
   --cabecalho-fundo: rgb(246 247 249 / 78%);
   --destaque: #2f5fd0;
+  --destaque-hover: #254ba8;
   --destaque-texto: #ffffff;
   --erro: #b3261e;
 }
@@ -22,6 +23,7 @@
     --borda-forte: #7b8491;
     --cabecalho-fundo: rgb(20 23 26 / 78%);
     --destaque: #7fa2f5;
+    --destaque-hover: #a3bdf8;
     --destaque-texto: #10141a;
     --erro: #f2a19b;
   }
@@ -66,12 +68,18 @@ a {
 
 button,
 .botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
   padding: 0.5rem 0.9rem;
-  border: 1px solid var(--borda);
+  border: 1px solid var(--borda-forte);
   border-radius: 6px;
   background: var(--superficie);
   color: var(--texto);
   font: inherit;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
 }
@@ -86,6 +94,22 @@ button.primario,
   border-color: var(--destaque);
   background: var(--destaque);
   color: var(--destaque-texto);
+}
+
+button.primario:hover:not(:disabled),
+.botao.primario:hover {
+  border-color: var(--destaque-hover);
+  background: var(--destaque-hover);
+}
+
+button.perigo {
+  border-color: var(--erro);
+  color: var(--erro);
+}
+
+button.perigo:hover:not(:disabled) {
+  background: var(--erro);
+  color: var(--superficie);
 }
 
 :focus-visible {
@@ -189,7 +213,7 @@ button.primario,
 .formulario textarea {
   width: 100%;
   padding: 0.55rem 0.7rem;
-  border: 1px solid var(--borda);
+  border: 1px solid var(--borda-forte);
   border-radius: 6px;
   background: var(--superficie);
   color: var(--texto);

@@ -13,6 +13,25 @@ const formatoData = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "America/Sao_Paulo",
 });
 
+function IconeLapis() {
+  return (
+    <svg
+      aria-hidden="true"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+  );
+}
+
 export function ListaTarefas() {
   const trpc = useTRPC();
   const consulta = useInfiniteQuery(
@@ -77,9 +96,18 @@ export function ListaTarefas() {
               {formatoData.format(new Date(tarefa.dataCriacao))}
             </time>
             <div className="acoes">
-              <Link href={`/tarefas/${tarefa.id}/editar`}>Editar</Link>
+              <Link
+                href={`/tarefas/${tarefa.id}/editar`}
+                className="botao primario"
+                aria-label={`Editar tarefa: ${tarefa.titulo}`}
+              >
+                <IconeLapis />
+                Editar
+              </Link>
               <button
                 type="button"
+                className="perigo"
+                aria-label={`Excluir tarefa: ${tarefa.titulo}`}
                 disabled={exclusao.isPending}
                 onClick={() => excluir(tarefa.id, tarefa.titulo)}
               >

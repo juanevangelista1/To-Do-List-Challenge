@@ -111,7 +111,9 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
         <button type="submit" className="primario" disabled={salvando}>
           {salvando ? "Salvando..." : "Salvar"}
         </button>
-        <Link href="/">Cancelar</Link>
+        <Link href="/" className="botao">
+          Cancelar
+        </Link>
       </div>
     </form>
   );
