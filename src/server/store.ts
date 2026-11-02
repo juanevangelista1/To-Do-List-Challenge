@@ -10,7 +10,7 @@ export function criarStore(iniciais: DadosTarefa[] = []) {
   const tarefas = new Map<number, Tarefa>();
   let ultimoId = 0;
 
-  function criar(dados: DadosTarefa) {
+  function create(dados: DadosTarefa) {
     const tarefa: Tarefa = {
       ...dados,
       id: ++ultimoId,
@@ -20,24 +20,24 @@ export function criarStore(iniciais: DadosTarefa[] = []) {
     return tarefa;
   }
 
-  iniciais.forEach(criar);
+  iniciais.forEach(create);
 
   return {
-    criar,
-    listar(limite: number, cursor?: number) {
+    create,
+    list(limit: number, cursor?: number) {
       const candidatas = [...tarefas.values()]
         .reverse()
         .filter((tarefa) => cursor === undefined || tarefa.id < cursor);
-      const itens = candidatas.slice(0, limite);
+      const items = candidatas.slice(0, limit);
       return {
-        itens,
-        proximoCursor: candidatas.length > limite ? itens.at(-1)?.id : undefined,
+        items,
+        nextCursor: candidatas.length > limit ? items.at(-1)?.id : undefined,
       };
     },
-    buscar(id: number) {
+    find(id: number) {
       return tarefas.get(id);
     },
-    atualizar(id: number, dados: DadosTarefa) {
+    update(id: number, dados: DadosTarefa) {
       const atual = tarefas.get(id);
       if (!atual) return undefined;
       const atualizada: Tarefa = {
@@ -48,7 +48,7 @@ export function criarStore(iniciais: DadosTarefa[] = []) {
       tarefas.set(id, atualizada);
       return atualizada;
     },
-    remover(id: number) {
+    remove(id: number) {
       return tarefas.delete(id);
     },
   };

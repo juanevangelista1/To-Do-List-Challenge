@@ -52,15 +52,15 @@ Open [http://localhost:3000](http://localhost:3000). The project does not use en
 
 ### API
 
-All procedures are defined in `src/server/router.ts` and exposed at `/api/trpc`. Their names and fields are in Portuguese, following the challenge specification.
+All procedures are defined in `src/server/router.ts` and exposed at `/api/trpc`. The task fields `titulo`, `descricao` and `dataCriacao` keep the Portuguese names required by the challenge.
 
 | Procedure | Type | Input | Errors |
 | --- | --- | --- | --- |
-| `listar` | query | `limite?` (1 to 50, default 10), `cursor?` | `BAD_REQUEST` |
-| `buscarPorId` | query | `id` | `BAD_REQUEST`, `NOT_FOUND` |
-| `criar` | mutation | `titulo`, `descricao?` | `BAD_REQUEST` |
-| `atualizar` | mutation | `id`, `titulo`, `descricao?` | `BAD_REQUEST`, `NOT_FOUND` |
-| `deletar` | mutation | `id` | `BAD_REQUEST`, `NOT_FOUND` |
+| `list` | query | `limit?` (1 to 50, default 10), `cursor?` | `BAD_REQUEST` |
+| `getById` | query | `id` | `BAD_REQUEST`, `NOT_FOUND` |
+| `create` | mutation | `titulo`, `descricao?` | `BAD_REQUEST` |
+| `update` | mutation | `id`, `titulo`, `descricao?` | `BAD_REQUEST`, `NOT_FOUND` |
+| `delete` | mutation | `id` | `BAD_REQUEST`, `NOT_FOUND` |
 
 A task has the following shape:
 
@@ -93,7 +93,7 @@ src/
 - **Cursor pagination:** uses the auto-incrementing `id` and fetches tasks with `id < cursor`. With offset pagination, deleting a task while scrolling would cause another one to be skipped.
 - **SSR with hydration:** the server fetches the first page and hands it to TanStack Query in the browser, which continues from that data without repeating the initial request. The page uses `force-dynamic` so it is not generated statically at build time.
 - **Single schema:** the form and the API share the same Zod schema. The form gives immediate feedback, and the API remains the trusted validation.
-- **Full updates:** `atualizar` always receives the title and description, which removes any doubt between keeping and clearing the description.
+- **Full updates:** `update` always receives the title and description, which removes any doubt between keeping and clearing the description.
 - **Dates as ISO strings:** this avoids a transformer such as `superjson`. Dates are displayed with a fixed locale and time zone to prevent hydration differences between server and browser.
 - **Accessible infinite scroll:** an `IntersectionObserver` watches the "Load more" button, which stays available for keyboard navigation and for retrying after a failure.
 - **Loading state on the edit link:** a `loading.tsx` on the edit route would start streaming before the app knows whether the task exists, turning the 404 status into a 200. `useLinkStatus` shows the loading state on the link and keeps the correct status.
@@ -170,15 +170,15 @@ Acesse [http://localhost:3000](http://localhost:3000). O projeto não usa variá
 
 ### Procedimentos da API
 
-Todos os procedimentos ficam em `src/server/router.ts` e são expostos em `/api/trpc`. Os nomes e campos estão em português, seguindo a especificação do desafio.
+Todos os procedimentos ficam em `src/server/router.ts` e são expostos em `/api/trpc`. Os campos `titulo`, `descricao` e `dataCriacao` mantêm os nomes em português exigidos pelo desafio.
 
 | Procedimento | Tipo | Entrada | Erros |
 | --- | --- | --- | --- |
-| `listar` | query | `limite?` (1 a 50, padrão 10), `cursor?` | `BAD_REQUEST` |
-| `buscarPorId` | query | `id` | `BAD_REQUEST`, `NOT_FOUND` |
-| `criar` | mutation | `titulo`, `descricao?` | `BAD_REQUEST` |
-| `atualizar` | mutation | `id`, `titulo`, `descricao?` | `BAD_REQUEST`, `NOT_FOUND` |
-| `deletar` | mutation | `id` | `BAD_REQUEST`, `NOT_FOUND` |
+| `list` | query | `limit?` (1 a 50, padrão 10), `cursor?` | `BAD_REQUEST` |
+| `getById` | query | `id` | `BAD_REQUEST`, `NOT_FOUND` |
+| `create` | mutation | `titulo`, `descricao?` | `BAD_REQUEST` |
+| `update` | mutation | `id`, `titulo`, `descricao?` | `BAD_REQUEST`, `NOT_FOUND` |
+| `delete` | mutation | `id` | `BAD_REQUEST`, `NOT_FOUND` |
 
 Uma tarefa tem o seguinte formato:
 
@@ -211,7 +211,7 @@ src/
 - **Paginação por cursor:** usa o `id` autoincremental e busca as tarefas com `id < cursor`. Com offset, excluir uma tarefa durante a rolagem faria outra ser pulada.
 - **SSR com hidratação:** o servidor busca a primeira página e a envia ao TanStack Query no navegador, que continua a partir desses dados sem repetir a requisição inicial. A página usa `force-dynamic` para não ser gerada de forma estática no build.
 - **Schema único:** o formulário e a API usam o mesmo schema Zod. O formulário dá retorno imediato, e a API continua sendo a validação confiável.
-- **Atualização completa:** `atualizar` sempre recebe o título e a descrição, o que elimina a dúvida entre "manter" e "limpar" a descrição.
+- **Atualização completa:** `update` sempre recebe o título e a descrição, o que elimina a dúvida entre "manter" e "limpar" a descrição.
 - **Data como string ISO:** dispensa um transformer como o `superjson`. A exibição usa idioma e fuso fixos para evitar diferenças de hidratação entre servidor e navegador.
 - **Infinite scroll acessível:** um `IntersectionObserver` observa o botão "Load more", que continua disponível para navegação por teclado e para tentar novamente após uma falha.
 - **Carregamento no link de edição:** um `loading.tsx` na rota de edição começaria o streaming antes de o app saber se a tarefa existe, transformando o status 404 em 200. O `useLinkStatus` mostra o carregamento no link e mantém o status correto.

@@ -27,7 +27,7 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
 
   function concluir(mensagem: string) {
     toast.success(mensagem);
-    queryClient.invalidateQueries(trpc.listar.pathFilter());
+    queryClient.invalidateQueries(trpc.list.pathFilter());
     router.push("/");
   }
 
@@ -36,13 +36,13 @@ export function FormularioTarefa({ tarefa }: { tarefa?: Tarefa }) {
   }
 
   const criacao = useMutation(
-    trpc.criar.mutationOptions({
+    trpc.create.mutationOptions({
       onSuccess: () => concluir("Task created"),
       onError: tratarErro,
     }),
   );
   const atualizacao = useMutation(
-    trpc.atualizar.mutationOptions({
+    trpc.update.mutationOptions({
       onSuccess: () => concluir("Task updated"),
       onError: tratarErro,
     }),

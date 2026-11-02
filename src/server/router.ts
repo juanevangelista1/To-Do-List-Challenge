@@ -21,35 +21,35 @@ function tarefaNaoEncontrada() {
 }
 
 export const appRouter = t.router({
-  listar: t.procedure
+  list: t.procedure
     .input(
       z.object({
-        limite: z.number().int().min(1).max(50).default(10),
+        limit: z.number().int().min(1).max(50).default(10),
         cursor: idSchema.optional(),
       }),
     )
-    .query(({ ctx, input }) => ctx.store.listar(input.limite, input.cursor)),
+    .query(({ ctx, input }) => ctx.store.list(input.limit, input.cursor)),
 
-  buscarPorId: t.procedure.input(z.object({ id: idSchema })).query(({ ctx, input }) => {
-    const tarefa = ctx.store.buscar(input.id);
+  getById: t.procedure.input(z.object({ id: idSchema })).query(({ ctx, input }) => {
+    const tarefa = ctx.store.find(input.id);
     if (!tarefa) throw tarefaNaoEncontrada();
     return tarefa;
   }),
 
-  criar: t.procedure
+  create: t.procedure
     .input(tarefaSchema)
-    .mutation(({ ctx, input }) => ctx.store.criar(input)),
+    .mutation(({ ctx, input }) => ctx.store.create(input)),
 
-  atualizar: t.procedure
+  update: t.procedure
     .input(tarefaSchema.extend({ id: idSchema }))
     .mutation(({ ctx, input: { id, ...dados } }) => {
-      const tarefa = ctx.store.atualizar(id, dados);
+      const tarefa = ctx.store.update(id, dados);
       if (!tarefa) throw tarefaNaoEncontrada();
       return tarefa;
     }),
 
-  deletar: t.procedure.input(z.object({ id: idSchema })).mutation(({ ctx, input }) => {
-    if (!ctx.store.remover(input.id)) throw tarefaNaoEncontrada();
+  delete: t.procedure.input(z.object({ id: idSchema })).mutation(({ ctx, input }) => {
+    if (!ctx.store.remove(input.id)) throw tarefaNaoEncontrada();
     return { id: input.id };
   }),
 });

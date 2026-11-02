@@ -46,15 +46,15 @@ function ConteudoLinkEditar() {
 export function ListaTarefas() {
   const trpc = useTRPC();
   const consulta = useInfiniteQuery(
-    trpc.listar.infiniteQueryOptions({}, { getNextPageParam: (pagina) => pagina.proximoCursor }),
+    trpc.list.infiniteQueryOptions({}, { getNextPageParam: (pagina) => pagina.nextCursor }),
   );
 
   const queryClient = useQueryClient();
   const exclusao = useMutation(
-    trpc.deletar.mutationOptions({
+    trpc.delete.mutationOptions({
       onSuccess: () => toast.success("Task deleted"),
       onError: (erro) => toast.error(obterMensagemErro(erro)),
-      onSettled: () => queryClient.invalidateQueries(trpc.listar.pathFilter()),
+      onSettled: () => queryClient.invalidateQueries(trpc.list.pathFilter()),
     }),
   );
 
@@ -72,7 +72,7 @@ export function ListaTarefas() {
     return () => observador.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError]);
 
-  const tarefas = consulta.data?.pages.flatMap((pagina) => pagina.itens) ?? [];
+  const tarefas = consulta.data?.pages.flatMap((pagina) => pagina.items) ?? [];
 
   function excluir(id: number, titulo: string) {
     if (window.confirm(`Delete task "${titulo}"?`)) exclusao.mutate({ id });

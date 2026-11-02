@@ -8,7 +8,7 @@ export default async function HomePage() {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchInfiniteQuery(
-    trpc.listar.infiniteQueryOptions({}, { getNextPageParam: (pagina) => pagina.proximoCursor }),
+    trpc.list.infiniteQueryOptions({}, { getNextPageParam: (pagina) => pagina.nextCursor }),
   );
 
   return (
