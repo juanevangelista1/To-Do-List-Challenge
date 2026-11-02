@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Providers } from "@/trpc/client";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Lista de Tarefas",
