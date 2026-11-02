@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import { useState, type ReactNode } from "react";
+import { Toaster } from "sonner";
 import type { AppRouter } from "@/server/router";
 import { criarQueryClient } from "@/trpc/query-client";
 
@@ -30,6 +31,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         {children}
+        <Toaster richColors position="top-center" />
       </TRPCProvider>
     </QueryClientProvider>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { obterProximoCursor } from "@/lib/paginacao";
 import { useTRPC } from "@/trpc/client";
 
@@ -16,7 +17,20 @@ export function ListaTarefas() {
     trpc.listar.infiniteQueryOptions({}, { getNextPageParam: obterProximoCursor }),
   );
 
+  const queryClient = useQueryClient();
+  const exclusao = useMutation(
+    trpc.deletar.mutationOptions({
+      onSuccess: () => toast.success("Tarefa excluída"),
+      onError: (erro) => toast.error(erro.message),
+      onSettled: () => queryClient.invalidateQueries(trpc.listar.pathFilter()),
+    }),
+  );
+
   const tarefas = consulta.data?.pages.flatMap((pagina) => pagina.itens) ?? [];
+
+  function excluir(id: number, titulo: string) {
+    if (window.confirm(`Excluir a tarefa "${titulo}"?`)) exclusao.mutate({ id });
+  }
 
   return (
     <>
@@ -43,6 +57,17 @@ export function ListaTarefas() {
             <time dateTime={tarefa.dataCriacao}>
               {formatoData.format(new Date(tarefa.dataCriacao))}
             </time>
+            <div className="acoes">
+              <button
+                type="button"
+                disabled={exclusao.isPending}
+                onClick={() => excluir(tarefa.id, tarefa.titulo)}
+              >
+                {exclusao.isPending && exclusao.variables?.id === tarefa.id
+                  ? "Excluindo..."
+                  : "Excluir"}
+              </button>
+            </div>
           </li>
         ))}
       </ul>
